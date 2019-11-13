@@ -1,0 +1,58 @@
+---
+title: "Psych Package Demo"
+output: html_notebook
+---
+
+##Step 1: 
+* Load psych and psych tools package into R and load. 
+```{r}
+install.packages("psych")
+library("psych")
+install.packages("psychTools")
+library("psychTools")
+
+install.packages("GPArotation")
+library(GPArotation)
+```
+
+You can use the psych package without the psychTools package but it having psychTools allows for clearer outputs because it supports certian data functions and makes file manipulation easier. 
+
+##Step 2 
+Load data into R: 
+```{r}
+#Example data consists of 25 personality self report items taken from the International Personality Item Pool. Data from 2800 participants are included. 
+data("bfi")
+```
+
+The items in this questionaire include the concepts from the Big Five: Agreeableness, Conscientiousness, Extraversion, Neuroticism, and Opennness. However, weren't created to measure the big five. 
+
+##Step 3 
+Find descriptive statistics. 
+```{r}
+View(bfi)
+describe(bfi) #Descriptive statistics of the sample and the items within the questionnaire
+```
+
+##Factor Analysis 
+
+Factor analysis can be done with all items at once or by specific groups. For example, we can look at the structure of the variable education or gender and how it interacts with the scales A1-5 ,C1-5 and so on. 
+```{r}
+fa(bfi) #factor analysis comparing the structures in multiple groups 
+sb <- statsBy(bfi[c(1:22,27)], group="education",cors=TRUE) #choose the columns you want to group and the variable you want it to be group by 
+faBy(sb,nfactors=5) #find the 5 factor solution for each education level, exploratory analyses of the structure within each of multiple groups 
+```
+##Intercorrelation analysis 
+
+This allows us to create a matrix table and see the correlation between sacles. 
+
+```{r}
+keys.list <-
+  list(agree=c("-A1","A2","A3","A4","A5"),conscientious=c("C1","C2","C3","-C4","-C5"),
+extraversion=c("-E1","-E2","E3","E4","E5"),neuroticism=c("N1","N2","N3","N4","N5"),
+openness = c("O1","-O2","O3","O4","-O5")) 
+ scores <- scoreItems(keys.list,bfi,min=1,max=6) #specify the minimum and maximum values
+ scores #show the use of the fa.lookup, which will print the factor analysis loadings matrix along with the item “content" taken from a dictionary of items. 
+keys.lookup(keys.list,bfi.dictionary[,1:4])
+#keys.lookup is similar to fa.lookup  
+```
+

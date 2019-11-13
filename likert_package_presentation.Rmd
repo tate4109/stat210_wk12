@@ -1,0 +1,110 @@
+---
+title: "Likert Package"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+Install the packages "psych" and "likert
+
+```{r}
+if(!require(psych)){install.packages("psych")}
+if(!require(likert)){install.packages("likert")}
+library("psych")
+library("likert")
+
+```
+
+##  ------------------- Setting up... -------------------
+
+```{r}
+options(digits=2)
+
+require(likert)
+data(pisaitems)
+```
+
+"pisaitems":
+Programme of International Student Assessment
+North American (i.e. Canada, Mexico, and United States) results from the 2009 Programme of International Student Assessment (PISA) as provided by the Organization for Economic Co-operation and Development (OECD). See http://www.pisa.oecd.org/ for more information including the code book.
+
+```{r}
+##### Item 24: Reading Attitudes
+items24 <- pisaitems[,substr(names(pisaitems), 1,5) == 'ST24Q']
+head(items24); ncol(items24)
+
+names(items24) <- c(
+			ST24Q01="I read only if I have to.",
+			ST24Q02="Reading is one of my favorite hobbies.",
+			ST24Q03="I like talking about books with other people.",
+			ST24Q04="I find it hard to finish books.",
+			ST24Q05="I feel happy if I receive a book as a present.",
+			ST24Q06="For me, reading is a waste of time.",
+			ST24Q07="I enjoy going to a bookstore or a library.",
+			ST24Q08="I read only to get information that I need.",
+			ST24Q09="I cannot sit still and read for more than a few minutes.",
+			ST24Q10="I like to express my opinions about books I have read.",
+			ST24Q11="I like to exchange books with my friends.")
+str(items24)
+l24 <- likert(items24)
+
+```
+
+
+#  ------------------- 1: Summarize -------------------
+
+```{r}
+summary(l24)
+```
+
+#  ------------------- 2: Plots -------------------
+```{r}
+plot(l24)
+plot(l24, ordered=FALSE, ______________=names(items24)) 
+plot(l24, center=2.5, wrap=30)
+
+#code to change colors
+#plot(l24, colors=c('orange','darkorange','darkblue','blue'))
+
+```
+
+
+#  ------------------- 3: Heat Plot -------------------
+```{r}
+plot(l24, type = 'heat', wrap=30, text.size=4, digits = 0) + ggtitle('My title')
+
+
+```
+
+
+#  ------------------- 4: Reversing Levels -------------------
+```{r}
+# Reverse the levels
+items24.reverse <- reverse.levels(items24)
+l24.reverse <- likert(items24.reverse)
+print(l24.reverse)
+plot(l24)
+plot(l24.reverse)
+
+```
+
+
+#  ------------------- 5: Viewing one variable -------------------
+```{r}
+## With only one varaible
+lone <- likert(items24[___ drop=FALSE])
+plot(lone)
+
+loneg <- likert(items24[___ drop=FALSE], _________=pisaitems$CNT)
+plot(loneg)
+```
+
+
+source: https://github.com/jbryer/likert/blob/master/demo/likert.R 
+
+
+
+
+
+
+
